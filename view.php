@@ -41,6 +41,8 @@
 
     //close the DB connection 
     $statement->closeCursor(); 
+
+    echo "<a href='view.php'> View All Tunes </a>"; 
     ?>
   <footer>
         <p> &copy; <?php echo getdate()['year']; ?> </p>

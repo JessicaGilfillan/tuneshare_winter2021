@@ -7,7 +7,7 @@ try {
     $password = 'root';
     //create instance of PDO object
     $db = new PDO($dsn,$username, $password); 
-    echo 'Connected successfully! Whoo hoo!!!!'; 
+    //echo 'Connected successfully! Whoo hoo!!!!'; 
 }
 catch(PDOException $e) {
     //display error message if things go wrong! 

@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thanks For Submitting</title>
-</head>
-<body>
-    <header>
-        <h1> TuneShare 2021 - Share Your Fave Tunes & Join The Community</h1>
-    </header>
-        <?php
+<?php 
+        ob_start(); 
+        require('header.php');
 
         //1. create variables to store info 
 
@@ -21,6 +11,11 @@
         $age = filter_input(INPUT_POST, 'age', FILTER_VALIDATE_INT);
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $favsong = filter_input(INPUT_POST, 'favsong');
+        //intiailize id 
+        $id = null;
+        $id = filter_input(INPUT_POST, 'user_id'); 
+
+
         //set up a flag variable for debugging 
         $ok = true; 
 
@@ -39,9 +34,19 @@
         if($ok === true) {
             try {
                 //connect to db 
-                require('connect.php'); 
+                require('connect.php');
+
                 //set up SQL query 
-                $sql = "INSERT into songs (first_name, last_name, genre, location, email, age, favsong) VALUES (:firstname, :lastname, :genre, :location, :email, :age, :favsong);";
+
+                if(!empty($id)) {
+                  $sql = "UPDATE SONGS SET first_name = :firstname, last_name = :lastname, genre = :genre, location = :location, email = :email, age = :age, favsong = :favsong WHERE user_id = :user_id;"; 
+
+                }
+                else {
+                    $sql = "INSERT into songs (first_name, last_name, genre, location, email, age, favsong) VALUES (:firstname, :lastname, :genre, :location, :email, :age, :favsong);";
+                }
+
+
                 //call the prepare method of the PDO object 
                 $statement = $db->prepare($sql);
 
@@ -54,27 +59,25 @@
                 $statement->bindParam(':age', $age);
                 $statement->bindParam(':favsong', $favsong);
 
+                //bind $id if updating 
+                if(!empty($id)) {
+                    $statement->bindParam(':user_id', $id); 
+                }               
+
                 //execute the query 
                 $statement->execute(); 
 
                 //echo '<p> Success, your tune has been added!</p> ';
-                echo "<a href='view.php'> View All Tunes </a>";  
-
                 //close DB connection 
                 $statement->closeCursor(); 
+                header('location:view.php');
+
             
             }
             catch(PDOException $e) {
-            echo '<p> Whoops something went wrong! </p> '; 
-            $error_message = $e->getMessage();
-            echo $error_message; 
-
+             header('location:error.php');  
             }
-
         }
+        require('footer.php'); 
+        ob_flush(); 
         ?>
-    <footer>
-        <p> &copy; <?php echo getdate()['year']; ?> </p>
-    </footer> 
-</body>
-</html>

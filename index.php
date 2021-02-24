@@ -35,7 +35,6 @@ if(!empty($_GET['id']) && (is_numeric($_GET['id']))) {
     $records = $statement->fetchAll(); 
 
     foreach($records as $record) :
-     $id = $record['user_id']; 
      $firstname = $record['first_name']; 
      $lastname = $record['last_name']; 
      $location = $record['location']; 

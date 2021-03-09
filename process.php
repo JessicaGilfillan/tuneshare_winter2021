@@ -35,11 +35,9 @@
             try {
                 //connect to db 
                 require('connect.php');
-
                 //set up SQL query 
-
                 if(!empty($id)) {
-                  $sql = "UPDATE SONGS SET first_name = :firstname, last_name = :lastname, genre = :genre, location = :location, email = :email, age = :age, favsong = :favsong WHERE user_id = :user_id;"; 
+                  $sql = "UPDATE songs SET first_name = :firstname, last_name = :lastname, genre = :genre, location = :location, email = :email, age = :age, favsong = :favsong WHERE user_id = :user_id;"; 
 
                 }
                 else {
